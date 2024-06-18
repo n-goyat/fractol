@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "MLX42.h"
-#include "libft.h"
+#include "./libft/libft.h"
 
 #define WIDTH 800
 #define HEIGHT 800
@@ -28,25 +28,45 @@
 #define ELECTRIC_BLUE		0x0066FF  // A radiant blue
 #define LAVA_RED			0xFF3300  // A bright, molten red
 
+typedef enum e_fractal_sets {
+	mandelbrot,
+	julia,
+	burning_ship,
+}		t_fractal_sets;
+
 typedef struct s_complex {
 	double re;
 	double im;
 } t_complex;
 
+typedef struct s_coordinates {
+	int	x;
+	int	y;
+} t_coordinates;
+
 typedef struct s_params {
-	void *mlx;
-	void *win;
-	void *img;
-	char *addr;
-	int bpp;
-	int line_len;
-	int endian;
-	double zoom;
-	double offset_x;
-	double offset_y;
-	int max_iter;
-	double escape_value;
-	t_complex c;
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				bpp;
+	int				line_len;
+	int				endian;
+	double			x_max;
+	double			x_min;
+	double			y_max;
+	double			y_min;
+	double			zoom;
+	double			offset_x;
+	double			offset_y;
+	int				max_iter;
+	int				iter;
+	double			escape_value;
+	t_complex		*z;
+	t_complex		*c;
+	t_complex		*julia;
+	t_fractal_sets	set;
+	t_coordinates	coordinates;
 } t_params;
 
 //***PARSER***
@@ -57,7 +77,9 @@ void	ft_errormsg(t_params *fractol);
 void	malloc_error(void);
 
 //***INIT***
-void	fractal_init(t_params *fractal);
+int		fractal_init(t_params *fractal, int argc, char **argv);
+void	init_julia(t_params *fractal, int argc, char **argv);
+void	init_mandelbrot(t_params *fractal);
 
 //***MATH***
 double	map(double unscaled_num, double new_min, double new_max, double old_max);

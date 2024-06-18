@@ -1,41 +1,57 @@
 //init.c
 #include "../includes/fractol.h"
 
-void data_init(t_params *fractal)
+void init_mandelbrot(t_params *fractal)
 {
-	fractal->zoom = 1.0;
-	fractal->offset_x = 0.0;
-	fractal->offset_y = 0.0;
-	fractal->max_iter = 100;
-	fractal->escape_value = 4.0; // Adjust as needed
-	fractal->c.re = 0.0;
-	fractal->c.im = 0.0;
+	fractal->coordinates.x = 0;
+	fractal->coordinates.y = 0;
+	fractal->x_max = 2.0;
+	fractal->y_max = 2.0;
+	fractal->x_min = -2.0;
+	fractal->y_min = -2.0;
 }
 
-void fractal_init(t_params *fractal)
+void init_julia(t_params *fractal, int argc, char **argv)
 {
-	fractal->mlx = mlx_init(WIDTH, HEIGHT, "fractol", false);
-	if (fractal->mlx == NULL)
-		malloc_error();
-	fractal->win = mlx_new_window(fractal->mlx, WIDTH, HEIGHT, "fractol");
-	if (fractal->win == NULL)
+	fractal->coordinates.x = 0;
+	fractal->coordinates.y = 0;
+	fractal->x_max = 2.0;
+	fractal->y_max = 2.0;
+	fractal->x_min = -2.0;
+	fractal->y_min = -2.0;
+	fractal->julia->re = -0.8;  // Default real part of c for Julia set
+	fractal->julia->im = 0.156; // Default imaginary part c for Julia set
+	if (argc == 3)
+		ft_freefract();//TODO
+	if (argc == 4)
 	{
-		/*mlx_delete_image(fractol->mlx, fractol->img);
-		mlx_terminate(fractol->mlx);
-		free(fractal->mlx);*/
-		malloc_error();
+		fractal->julia->re = atod(argv[2]); // Real part of c for Julia set
+		fractal->julia->im = atod(argv[3]); // Imaginary part of c for Julia set
+		if (fractal->julia->re < -2 || fractal->julia->re > 2 || fractal->julia->im < -2 || fractal->julia->im > 2)
+			ft_freefract();//TODO
 	}
+}
+
+int fractal_init(t_params *fractal, int argc, char **argv)
+{
+	fractal->c = (t_complex *)malloc(sizeof(t_complex));
+	fractal->z = (t_complex *)malloc(sizeof(t_complex));
+	fractal->julia = (t_complex *)malloc(sizeof(t_complex));
+	if (!fractal->c || !fractal->z || !fractal->julia)
+		return (ft_freefract());//TODO
+	if (fractal->set == mandelbrot)
+		init_mandelbrot(fractal);
+	else if (fractal->set == julia)
+		init_julia(fractal, argc, argv);
+	fractal->max_iter = 500;
+	fractal->iter = 0;
+	fractal->zoom = 0.1;
+	fractal->escape_value = 4.0;
+	fractal->mlx = mlx_init(WIDTH, HEIGHT, "FRACTOL", false);
 	fractal->img = mlx_new_image(fractal->mlx, WIDTH, HEIGHT);
-	if (fractal->img == NULL)
-	{
-		/*mlx_delete_image(fractol->mlx, fractol->img);
-		mlx_terminate(fractol->mlx);
-		free(fractal->mlx);*/
-		malloc_error();
-	}
-	fractal->addr = mlx_get_data_addr(fractal->img, 
-									&fractal->bpp, &fractal->line_len, &fractal->endian);
-	data_init(fractal);
+	if (fractal->mlx && fractal->img)
+		return (1);
+	return (ft_freefract());//TODO
 }
 
 /*void events_init(t_params *fractal)

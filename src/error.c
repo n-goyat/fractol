@@ -15,6 +15,6 @@ void	ft_errormsg(t_params *fractol)
 
 void malloc_error(void)
 {
-	perror("malloc error");
+	ft_putendl_fd("malloc error", 2);
 	exit(EXIT_FAILURE);
 }

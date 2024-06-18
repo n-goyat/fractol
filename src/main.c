@@ -7,13 +7,13 @@ int parser(int argc, char **argv, t_params *fractal)
 		ft_errormsg(fractal);
 	else if (argc == 2 && ft_strncmp(argv[1], "mandelbrot", 11) == 0)
 	{
-		fractal_init(fractal);
+		fractal_init(fractal, argc, argv);
 		fractal_render(fractal);
 		mlx_loop(fractal->mlx);
 	}
 	else if (argc == 4 && ft_strncmp(argv[1], "julia", 6) == 0)
 	{
-		fractal_init(fractal);
+		fractal_init(fractal, argc, argv);
 		fractal_render(fractal);
 		mlx_loop(fractal->mlx);
 	}
@@ -24,14 +24,9 @@ int parser(int argc, char **argv, t_params *fractal)
 
 int main(int argc, char **argv)
 {
-	t_params fractal;
+	t_params *fractal;
 	
-	/*fractal = (t_params *)malloc(sizeof(t_params));
-	if (!fractal)
-		malloc_error();
-	parser(argc, argv, fractal);*/
-	if (parser(argc, argv, &fractal))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-	//return (0);
+	fractal = (t_params *)malloc(sizeof(t_params));
+	parser(argc, argv, fractal);
+	return (0);
 }

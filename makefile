@@ -17,7 +17,7 @@ LIBFT = $(LIBFT_PATH)/libft.a
 CC = gcc
 
 # Source files
-SRC = src/fractol.c src/error.c src/init.c src/math.c src/render.c
+SRC = src/main.c src/error.c src/init.c src/math.c src/render.c
 OBJ = $(SRC:%.c=%.o)
 
 # Includes and libraries
