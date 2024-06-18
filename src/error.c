@@ -1,4 +1,5 @@
-#include "fractol.h"
+//error.c
+#include "../includes/fractol.h"
 
 void	ft_errormsg(t_params *fractol)
 {

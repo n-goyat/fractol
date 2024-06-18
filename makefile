@@ -1,13 +1,14 @@
 # Makefile for fractol project (Linux)
-
+silence: all clean fclean re MLX42
 # Name of the executable
 NAME = fractol
 
 # Compilation flags
 CFLAGS = -Wall -Wextra -Werror -Wunreachable-code -Ofast -g
+LDFLAGS = -Llibft -lft -L/MLX42 -lmlx42 -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Directories and libraries
-MLX_PATH = ./MLX42/build
+MLX_PATH = ./MLX42/build/libmlx42.a
 MLX = $(MLX_PATH)/libmlx42.a
 LIBFT_PATH = ./libft
 LIBFT = $(LIBFT_PATH)/libft.a
@@ -16,11 +17,11 @@ LIBFT = $(LIBFT_PATH)/libft.a
 CC = gcc
 
 # Source files
-SRC = fractol.c error.c init.c
+SRC = src/fractol.c src/error.c src/init.c src/math.c src/render.c
 OBJ = $(SRC:%.c=%.o)
 
 # Includes and libraries
-INCLUDES = -I./MLX42/include/MLX42/ -I./libft/ -I./includes/
+INCLUDES = -I./includes -I./MLX42/include/MLX42/ -I./libft/
 LIBS = -lglfw -lGL -lm -lX11 -lXrandr -lXi -lXxf86vm -lpthread -ldl
 
 # Default target
@@ -36,7 +37,7 @@ MLX42:
 	@cd MLX42 && cmake -B build && cmake --build build -j4
 
 # Compile source files
-%.o : src/%.c
+%.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # Build libft library
@@ -45,10 +46,10 @@ $(LIBFT):
 
 # Clean up objects and executable
 clean:
-	@rm -rf $(OBJ)
+	@rm -f $(OBJ)
 
 fclean: clean
-	@rm -rf $(NAME)
+	@rm -f $(NAME)
 	@make -C $(LIBFT_PATH) fclean
 	@if [ -d "MLX42" ]; then rm -rf MLX42; fi
 
