@@ -22,4 +22,4 @@ t_complex square_complex(t_complex z)
 	res.re = z.re * z.re - z.im * z.im;
 	res.im = 2 * z.re * z.im;
 	return (res);
-} 
+}

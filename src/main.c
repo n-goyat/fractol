@@ -11,7 +11,7 @@ int parser(int argc, char **argv, t_params *fractal)
 		fractal_render(fractal);
 		mlx_loop(fractal->mlx);
 	}
-	else if (argc == 4 && ft_strncmp(argv[1], "julia", 6) == 0)
+	else if (argc >= 2 && ft_strncmp(argv[1], "julia", 6) == 0)
 	{
 		fractal_init(fractal, argc, argv);
 		fractal_render(fractal);
@@ -28,5 +28,7 @@ int main(int argc, char **argv)
 	
 	fractal = (t_params *)malloc(sizeof(t_params));
 	parser(argc, argv, fractal);
+	mlx_delete_image(fractal->mlx, fractal->img);
+	mlx_terminate(fractal->mlx);
 	return (0);
 }

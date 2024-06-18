@@ -22,13 +22,13 @@ void init_julia(t_params *fractal, int argc, char **argv)
 	fractal->julia->re = -0.8;  // Default real part of c for Julia set
 	fractal->julia->im = 0.156; // Default imaginary part c for Julia set
 	if (argc == 3)
-		ft_freefract();//TODO
+		ft_freefract(fractal, 1);//TODO
 	if (argc == 4)
 	{
 		fractal->julia->re = atod(argv[2]); // Real part of c for Julia set
 		fractal->julia->im = atod(argv[3]); // Imaginary part of c for Julia set
 		if (fractal->julia->re < -2 || fractal->julia->re > 2 || fractal->julia->im < -2 || fractal->julia->im > 2)
-			ft_freefract();//TODO
+			ft_freefract(fractal, 1);//TODO
 	}
 }
 
@@ -38,12 +38,12 @@ int fractal_init(t_params *fractal, int argc, char **argv)
 	fractal->z = (t_complex *)malloc(sizeof(t_complex));
 	fractal->julia = (t_complex *)malloc(sizeof(t_complex));
 	if (!fractal->c || !fractal->z || !fractal->julia)
-		return (ft_freefract());//TODO
+		ft_freefract(fractal, 1);//TODO
 	if (fractal->set == mandelbrot)
 		init_mandelbrot(fractal);
 	else if (fractal->set == julia)
 		init_julia(fractal, argc, argv);
-	fractal->max_iter = 500;
+	fractal->max_iter = 200;
 	fractal->iter = 0;
 	fractal->zoom = 0.1;
 	fractal->escape_value = 4.0;
@@ -51,7 +51,8 @@ int fractal_init(t_params *fractal, int argc, char **argv)
 	fractal->img = mlx_new_image(fractal->mlx, WIDTH, HEIGHT);
 	if (fractal->mlx && fractal->img)
 		return (1);
-	return (ft_freefract());//TODO
+	ft_freefract(fractal, 1);//TODO
+	return (0);
 }
 
 /*void events_init(t_params *fractal)

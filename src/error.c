@@ -18,3 +18,16 @@ void malloc_error(void)
 	ft_putendl_fd("malloc error", 2);
 	exit(EXIT_FAILURE);
 }
+
+void	ft_freefract(t_params *fractol, int flag)
+{
+	free(fractol->z);
+	free(fractol->c);
+	free(fractol->julia);
+	if (flag == 1)
+		ft_errormsg(fractol);
+	free(fractol);
+	if (flag == 7)
+		exit(EXIT_SUCCESS);
+	exit(EXIT_FAILURE);
+}

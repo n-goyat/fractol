@@ -1,5 +1,5 @@
 # Makefile for fractol project (Linux)
-silence: all clean fclean re MLX42
+
 # Name of the executable
 NAME = fractol
 
@@ -8,7 +8,7 @@ CFLAGS = -Wall -Wextra -Werror -Wunreachable-code -Ofast -g
 LDFLAGS = -Llibft -lft -L/MLX42 -lmlx42 -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Directories and libraries
-MLX_PATH = ./MLX42/build/libmlx42.a
+MLX_PATH = ./MLX42/build/
 MLX = $(MLX_PATH)/libmlx42.a
 LIBFT_PATH = ./libft
 LIBFT = $(LIBFT_PATH)/libft.a

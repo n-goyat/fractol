@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "MLX42.h"
-#include "./libft/libft.h"
+#include "../libft/libft.h"
 
 #define WIDTH 800
 #define HEIGHT 800
@@ -75,6 +75,7 @@ int parser(int argc, char **argv, t_params *fractol);
 //***ERROR***
 void	ft_errormsg(t_params *fractol);
 void	malloc_error(void);
+void	ft_freefract(t_params *fractol, int flag);
 
 //***INIT***
 int		fractal_init(t_params *fractal, int argc, char **argv);
@@ -88,7 +89,7 @@ t_complex square_complex(t_complex z);
 
 //***RENDER***
 void	fractal_render(t_params *fractal);
-void	my_pixel_put(t_params *fractal, int x, int y, int color);
-void	handle_pixel(t_params *fractal, int x, int y);
+void	my_pixel_put(int x, int y, int color, t_params *fractal);
+void	handle_pixel(int x, int y, t_params *fractal);
 
 #endif
