@@ -12,6 +12,8 @@
 #define WIDTH 800
 #define HEIGHT 800
 
+#define NUM_THREADS 8
+
 #define BLACK		0x000000  // RGB(0, 0, 0)
 #define WHITE		0xFFFFFF  // RGB(255, 255, 255)
 #define RED			0xFF0000  // RGB(255, 0, 0)
@@ -31,8 +33,7 @@
 typedef enum e_fractal_sets {
 	mandelbrot,
 	julia,
-	burning_ship,
-}		t_fractal_sets;
+} t_fractal_sets;
 
 typedef struct s_complex {
 	double re;
@@ -48,10 +49,6 @@ typedef struct s_params {
 	void			*mlx;
 	void			*win;
 	void			*img;
-	char			*addr;
-	int				bpp;
-	int				line_len;
-	int				endian;
 	double			x_max;
 	double			x_min;
 	double			y_max;
@@ -68,6 +65,12 @@ typedef struct s_params {
 	t_fractal_sets	set;
 	t_coordinates	coordinates;
 } t_params;
+
+typedef struct {
+	t_params *fractal;
+	int start_y;
+	int end_y;
+} t_thread_data;
 
 //***PARSER***
 int parser(int argc, char **argv, t_params *fractol);
@@ -91,5 +94,12 @@ t_complex square_complex(t_complex z);
 void	fractal_render(t_params *fractal);
 void	my_pixel_put(int x, int y, int color, t_params *fractal);
 void	handle_pixel(int x, int y, t_params *fractal);
+double	map(double unscaled_num, double new_min, double new_max, double old_max);
+void render_thread_range(t_thread_data *data, int y_start, int y_end);
+void *render_thread(void *arg);
+void create_threads(pthread_t *threads, t_thread_data *thread_data, t_params *fractal);
+void join_threads(pthread_t *threads);
+void fractal_render(t_params *fractal);
+
 
 #endif

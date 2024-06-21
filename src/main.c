@@ -7,15 +7,19 @@ int parser(int argc, char **argv, t_params *fractal)
 		ft_errormsg(fractal);
 	else if (argc == 2 && ft_strncmp(argv[1], "mandelbrot", 11) == 0)
 	{
+		fractal->set = mandelbrot;
 		fractal_init(fractal, argc, argv);
 		fractal_render(fractal);
 		mlx_loop(fractal->mlx);
+		return (0);
 	}
 	else if (argc >= 2 && ft_strncmp(argv[1], "julia", 6) == 0)
 	{
+		fractal->set = julia;
 		fractal_init(fractal, argc, argv);
 		fractal_render(fractal);
 		mlx_loop(fractal->mlx);
+		return (0);
 	}
 	else
 		ft_errormsg(fractal);
