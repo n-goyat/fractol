@@ -92,14 +92,16 @@ t_complex square_complex(t_complex z);
 
 //***RENDER***
 void	fractal_render(t_params *fractal);
-void	my_pixel_put(int x, int y, int color, t_params *fractal);
+void	render_thread_range(t_thread_data *data, int y_start, int y_end);
+void	*render_thread(void *arg);
+void	create_threads(pthread_t *threads, t_thread_data *thread_data, t_params *fractal);
+void	join_threads(pthread_t *threads);
+
+//***PIXEL***
+void	compute_initial_values(int x, int y, t_params *fractal, t_complex *z, t_complex *c);
+void	iterate_and_compute_color(int *color, int *i, t_params *fractal, t_complex *z, t_complex *c);
+void	put_pixel(int x, int y, int color, t_params *fractal);
 void	handle_pixel(int x, int y, t_params *fractal);
-double	map(double unscaled_num, double new_min, double new_max, double old_max);
-void render_thread_range(t_thread_data *data, int y_start, int y_end);
-void *render_thread(void *arg);
-void create_threads(pthread_t *threads, t_thread_data *thread_data, t_params *fractal);
-void join_threads(pthread_t *threads);
-void fractal_render(t_params *fractal);
 
 
 #endif
