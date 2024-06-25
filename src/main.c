@@ -1,38 +1,44 @@
-//fractol.c
 #include "../includes/fractol.h"
 
 int parser(int argc, char **argv, t_params *fractal)
 {
 	if (argc < 2 || argc > 4)
-		ft_errormsg(fractal);
-	else if (argc == 2 && ft_strncmp(argv[1], "mandelbrot", 11) == 0)
+		return (0);
+	if (ft_strncmp(argv[1], "mandelbrot", 11) == 0 && argc == 2)
 	{
 		fractal->set = mandelbrot;
-		fractal_init(fractal, argc, argv);
-		fractal_render(fractal);
-		mlx_loop(fractal->mlx);
-		return (0);
+		return (1);
 	}
-	else if (argc >= 2 && ft_strncmp(argv[1], "julia", 6) == 0)
+	else if (ft_strncmp(argv[1], "julia", 5) == 0)
 	{
 		fractal->set = julia;
-		fractal_init(fractal, argc, argv);
-		fractal_render(fractal);
-		mlx_loop(fractal->mlx);
-		return (0);
+		if (argc == 2)
+			return (1);
+		if (argc == 4)
+		{
+			double re = atof(argv[2]);
+			double im = atof(argv[3]);
+			if (re >= -2 && re <= 2 && im >= -2 && im <= 2)
+				return (1);
+		}
 	}
-	else
-		ft_errormsg(fractal);
 	return (0);
 }
 
 int main(int argc, char **argv)
 {
 	t_params *fractal;
-	
-	fractal = (t_params *)malloc(sizeof(t_params));
-	parser(argc, argv, fractal);
-	mlx_delete_image(fractal->mlx, fractal->img);
-	mlx_terminate(fractal->mlx);
-	return (0);
+
+	fractal = malloc(sizeof(t_params));
+	if (!fractal)
+		return (EXIT_FAILURE);
+	if (!parser(argc, argv, fractal))
+		ft_errormsg(fractal);
+	if (!fractal_init(fractal, argc, argv))
+		return (EXIT_FAILURE);
+	mlx_scroll_hook(fractal->mlx, &scrollhook, fractal);
+	mlx_key_hook(fractal->mlx, &keyhook, fractal);
+	fractal_render(fractal);
+	mlx_loop(fractal->mlx);
+	free_and_null(fractal, 2);
 }

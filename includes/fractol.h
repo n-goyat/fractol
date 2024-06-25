@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <pthread.h>
 #include "MLX42.h"
 #include "../libft/libft.h"
 
@@ -20,15 +21,6 @@
 #define GREEN		0x00FF00  // RGB(0, 255, 0)
 #define BLUE		0x0000FF  // RGB(0, 0, 255)
 
-// Psychedelic colors
-#define MAGENTA_BURST		0xFF00FF  // A vibrant magenta
-#define LIME_SHOCK			0xCCFF00  // A blinding lime
-#define NEON_ORANGE			0xFF6600  // A blazing neon orange
-#define PSYCHEDELIC_PURPLE	0x660066  // A deep purple
-#define AQUA_DREAM			0x33CCCC  // A bright turquoise
-#define HOT_PINK			0xFF66B2  // As the name suggests!
-#define ELECTRIC_BLUE		0x0066FF  // A radiant blue
-#define LAVA_RED			0xFF3300  // A bright, molten red
 
 typedef enum e_fractal_sets {
 	mandelbrot,
@@ -39,11 +31,6 @@ typedef struct s_complex {
 	double re;
 	double im;
 } t_complex;
-
-typedef struct s_coordinates {
-	int	x;
-	int	y;
-} t_coordinates;
 
 typedef struct s_params {
 	void			*mlx;
@@ -56,6 +43,8 @@ typedef struct s_params {
 	double			zoom;
 	double			offset_x;
 	double			offset_y;
+	double			mouse_x;
+	double			mouse_y;
 	int				max_iter;
 	int				iter;
 	double			escape_value;
@@ -63,7 +52,6 @@ typedef struct s_params {
 	t_complex		*c;
 	t_complex		*julia;
 	t_fractal_sets	set;
-	t_coordinates	coordinates;
 } t_params;
 
 typedef struct {
@@ -72,13 +60,17 @@ typedef struct {
 	int end_y;
 } t_thread_data;
 
-//***PARSER***
+//***MAIN***
 int parser(int argc, char **argv, t_params *fractol);
+
+//***HOOKS***
+void		scrollhook(double unused, double ydelta, void *param);
+void		keyhook(mlx_key_data_t keydata, void *param);
 
 //***ERROR***
 void	ft_errormsg(t_params *fractol);
 void	malloc_error(void);
-void	ft_freefract(t_params *fractol, int flag);
+void	free_and_null(t_params *fractol, int flag);
 
 //***INIT***
 int		fractal_init(t_params *fractal, int argc, char **argv);
@@ -101,7 +93,7 @@ void	join_threads(pthread_t *threads);
 void	compute_initial_values(int x, int y, t_params *fractal, t_complex *z, t_complex *c);
 void	iterate_and_compute_color(int *color, int *i, t_params *fractal, t_complex *z, t_complex *c);
 void	put_pixel(int x, int y, int color, t_params *fractal);
+uint32_t set_color(int iteration, int max_iteration);
 void	handle_pixel(int x, int y, t_params *fractal);
-
 
 #endif

@@ -17,7 +17,7 @@ LIBFT = $(LIBFT_PATH)/libft.a
 CC = gcc
 
 # Source files
-SRC = src/main.c src/error.c src/init.c src/math.c src/render.c src/pixel.c
+SRC = $(addprefix src/, error.c hooks.c init.c main.c math.c pixel.c render.c )
 OBJ = $(SRC:%.c=%.o)
 
 # Includes and libraries
